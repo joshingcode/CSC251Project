@@ -1,12 +1,11 @@
+/**
+ * The Policy class represents an insurance policy for one person.
+ */
 public class Policy {
     private String policyNumber;
     private String providerName;
-    private String firstName;
-    private String lastName;
-    private int age;
-    private String smokingStatus;
-    private double height;
-    private double weight;
+    private PolicyHolder policyHolder;
+    private static int policyCount = 0;
 
     /**
      * No-arg constructor that initializes all fields to default values.
@@ -14,12 +13,8 @@ public class Policy {
     public Policy() {
         this.policyNumber = "";
         this.providerName = "";
-        this.firstName = "";
-        this.lastName = "";
-        this.age = 0;
-        this.smokingStatus = "non-smoker";
-        this.height = 0.0;
-        this.weight = 0.0;
+        this.policyHolder = new PolicyHolder();
+        policyCount++;
     }
 
     /**
@@ -36,12 +31,8 @@ public class Policy {
     public Policy(String policyNumber, String providerName, String firstName, String lastName, int age, String smokingStatus, double height, double weight) {
         this.policyNumber = policyNumber;
         this.providerName = providerName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.smokingStatus = smokingStatus;
-        this.height = height;
-        this.weight = weight;
+        this.policyHolder = new PolicyHolder(firstName, lastName, age, smokingStatus, height, weight);
+        policyCount++;
     }
 
     // Getters
@@ -62,11 +53,22 @@ public class Policy {
     }
 
     /**
+     * Gets the policyholder.
+     * @return a copy of the policyholder
+     */
+    public PolicyHolder getPolicyHolder() {
+        // Return defensive copy to minimize security risks
+        return new PolicyHolder(policyHolder.getFirstName(), policyHolder.getLastName(), 
+                                policyHolder.getAge(), policyHolder.getSmokingStatus(), 
+                                policyHolder.getHeight(), policyHolder.getWeight());
+    }
+
+    /**
      * Gets the policyholder's first name.
      * @return the policyholder's first name
      */
     public String getFirstName() {
-        return firstName;
+        return policyHolder.getFirstName();
     }
 
     /**
@@ -74,7 +76,7 @@ public class Policy {
      * @return the policyholder's last name
      */
     public String getLastName() {
-        return lastName;
+        return policyHolder.getLastName();
     }
 
     /**
@@ -82,7 +84,7 @@ public class Policy {
      * @return the policyholder's age
      */
     public int getAge() {
-        return age;
+        return policyHolder.getAge();
     }
 
     /**
@@ -90,7 +92,7 @@ public class Policy {
      * @return the policyholder's smoking status
      */
     public String getSmokingStatus() {
-        return smokingStatus;
+        return policyHolder.getSmokingStatus();
     }
 
     /**
@@ -98,7 +100,7 @@ public class Policy {
      * @return the policyholder's height in inches
      */
     public double getHeight() {
-        return height;
+        return policyHolder.getHeight();
     }
 
     /**
@@ -106,7 +108,7 @@ public class Policy {
      * @return the policyholder's weight in pounds
      */
     public double getWeight() {
-        return weight;
+        return policyHolder.getWeight();
     }
 
     // Setters
@@ -131,7 +133,7 @@ public class Policy {
      * @param firstName the policyholder's first name
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        policyHolder.setFirstName(firstName);
     }
 
     /**
@@ -139,7 +141,7 @@ public class Policy {
      * @param lastName the policyholder's last name
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        policyHolder.setLastName(lastName);
     }
 
     /**
@@ -147,7 +149,7 @@ public class Policy {
      * @param age the policyholder's age
      */
     public void setAge(int age) {
-        this.age = age;
+        policyHolder.setAge(age);
     }
 
     /**
@@ -155,7 +157,7 @@ public class Policy {
      * @param smokingStatus the policyholder's smoking status
      */
     public void setSmokingStatus(String smokingStatus) {
-        this.smokingStatus = smokingStatus;
+        policyHolder.setSmokingStatus(smokingStatus);
     }
 
     /**
@@ -163,7 +165,7 @@ public class Policy {
      * @param height the policyholder's height in inches
      */
     public void setHeight(double height) {
-        this.height = height;
+        policyHolder.setHeight(height);
     }
 
     /**
@@ -171,7 +173,7 @@ public class Policy {
      * @param weight the policyholder's weight in pounds
      */
     public void setWeight(double weight) {
-        this.weight = weight;
+        policyHolder.setWeight(weight);
     }
 
     // Calculate BMI
@@ -180,7 +182,7 @@ public class Policy {
      * @return the BMI calculated as (weight * 703) / (height^2)
      */
     public double calculateBMI() {
-        return (weight * 703) / (height * height);
+        return policyHolder.calculateBMI();
     }
 
     // Calculate price
@@ -190,10 +192,10 @@ public class Policy {
      */
     public double calculatePrice() {
         double price = 600.0;
-        if (age > 50) {
+        if (policyHolder.getAge() > 50) {
             price += 75.0;
         }
-        if (smokingStatus.equalsIgnoreCase("smoker")) {
+        if (policyHolder.getSmokingStatus().equalsIgnoreCase("smoker")) {
             price += 100.0;
         }
         double bmi = calculateBMI();
@@ -201,5 +203,25 @@ public class Policy {
             price += (bmi - 35) * 20;
         }
         return price;
+    }
+
+    /**
+     * Gets the total number of Policy objects created.
+     * @return the number of Policy objects
+     */
+    public static int getPolicyCount() {
+        return policyCount;
+    }
+
+    /**
+     * Returns a string representation of the Policy.
+     * @return a string containing all policy information
+     */
+    @Override
+    public String toString() {
+        return "Policy Number: " + policyNumber + "\n" +
+               "Provider Name: " + providerName + "\n" +
+               policyHolder.toString() + "\n" +
+               String.format("Policy Price: $%.2f", calculatePrice());
     }
 }

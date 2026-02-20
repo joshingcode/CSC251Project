@@ -36,21 +36,11 @@ public class Project_Joshua_Sease {
             return;
         }
 
-        // Display information for each policy
+        // Display information for each policy using implicit toString
         int smokerCount = 0;
         int nonSmokerCount = 0;
-        for (int i = 0; i < policies.size(); i++) {
-            Policy policy = policies.get(i);
-            System.out.println("Policy Number: " + policy.getPolicyNumber());
-            System.out.println("Provider Name: " + policy.getProviderName());
-            System.out.println("Policyholder's First Name: " + policy.getFirstName());
-            System.out.println("Policyholder's Last Name: " + policy.getLastName());
-            System.out.println("Policyholder's Age: " + policy.getAge());
-            System.out.println("Policyholder's Smoking Status (smoker/non-smoker): " + policy.getSmokingStatus());
-            System.out.println("Policyholder's Height: " + policy.getHeight() + " inches");
-            System.out.println("Policyholder's Weight: " + policy.getWeight() + " pounds");
-            System.out.printf("Policyholder's BMI: %.2f\n", policy.calculateBMI());
-            System.out.printf("Policy Price: $%.2f\n", policy.calculatePrice());
+        for (Policy policy : policies) {
+            System.out.println(policy);
             System.out.println();
 
             // Count smokers and non-smokers
@@ -62,6 +52,7 @@ public class Project_Joshua_Sease {
         }
 
         // Display counts
+        System.out.println("There were " + Policy.getPolicyCount() + " Policy objects created.");
         System.out.println("The number of policies with a smoker is: " + smokerCount);
         System.out.println("The number of policies with a non-smoker is: " + nonSmokerCount);
     }
